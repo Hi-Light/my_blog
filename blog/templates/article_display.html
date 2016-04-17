@@ -1,24 +1,28 @@
 {% block content %}
-    <div class="article_display">
-        <h3 class="article_title"><a href="{{ article.url }}">{{ article.title_cn }}</a></h3>
-        <div class="article_info">
+    <div class="panel panel-default article_display">
+        <div class="panel-body">
+
+            <h3 class="article_title"><a href="{{ article.url }}">{{ article.title_cn }}</a></h3>
+            <div class="article_info">
                         <span class="glyphicon glyphicon-calendar"
                               aria-hidden="true"></span> {{ article.create_time|date:"Y/n/j G:i" }}
-            &nbsp;<span
-                class="glyphicon glyphicon-eye-open"
-                aria-hidden="true"></span>&nbsp;{{ article.view_times }}&nbsp;&nbsp;<span
-                class="glyphicon glyphicon-comment"
-                aria-hidden="true"></span>&nbsp{{ article.comment_times }}
-            {% for tag in article.get_tags %}
-                <p class="label label-warning pull-right"><span class="glyphicon glyphicon-tag"
-                                                                aria-hidden="true"></span> {{ tag }}</p>
-                <span class="pull-right"> &nbsp;&nbsp;</span>
-            {% endfor %}
+                &nbsp;<span
+                    class="glyphicon glyphicon-eye-open"
+                    aria-hidden="true"></span>&nbsp;{{ article.view_times }}&nbsp;&nbsp;<span
+                    class="glyphicon glyphicon-comment"
+                    aria-hidden="true"></span>&nbsp{{ article.comment_times }}
+                {% for tag in article.get_tags %}
+                    <p class="label label-warning pull-right"><span class="glyphicon glyphicon-tag"
+                                                                    aria-hidden="true"></span> {{ tag }}</p>
+                    <span class="pull-right"> &nbsp;&nbsp;</span>
+                {% endfor %}
+            </div>
+            <div class="article_show">
+                <p align="left" class="content">{{ article.content_text }}
+                </p>
+                <a type="button" class="btn btn-success pull-right" href='{{ article.url }}'>查看详细
+                </a>
+            </div>
         </div>
-        <p align="left" class="content">{{ article.content_text }}</p>
-        <a href="{{ article.url }}">
-            <button type="button" class="btn btn-success">查看详细</button>
-        </a>
-        <br>
     </div>
 {% endblock %}

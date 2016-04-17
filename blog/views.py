@@ -168,8 +168,6 @@ def login(request):
         a = MyUser.objects.filter(email=email)
         user = auth.authenticate(username=email, password=password)
         if user is not None:
-            print("ok")
-            print(user.is_active)
             auth.login(request, user)
             return HttpResponseRedirect(url)
         else:
