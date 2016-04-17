@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <form method="POST" action="{% url 'user_create_view' %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputName">用户名</label>
+                    <input type="text" class="form-control" id="name" name="name"
+                           placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">邮箱</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                           placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">密码</label>
+                    <input type="password" class="form-control" id="password1" name="password1"
+                           placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">密码重复</label>
+                    <input type="password" class="form-control" id="password2" name="password2"
+                           placeholder="Password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default" data-dismiss="modal">注册！
+                </button>
+                <button type="button" class="btn btn-primary">确定</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

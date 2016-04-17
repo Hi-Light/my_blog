@@ -1,0 +1,23 @@
+body.base {
+    background-color: white;
+}
+
+p {
+    line-height: 150%
+}
+
+span#name_result {
+    color: red;
+}
+
+span#email_result {
+    color: red;
+}
+
+span#password1_result {
+    color: red;
+}
+
+span#password2_result {
+    color: red;
+}

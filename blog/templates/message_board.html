@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block head_plus %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/message_board.css' %}">
+{% endblock %}
+{% block content %}
+
+    <div class="container" xmlns="http://www.w3.org/1999/html">
+        {% for message in message_list %}
+            <div class="alert alert-info" role="alert">
+                {{ message.content }}
+
+                <h5> {{ message.name }} {{ message.email }} <span class="glyphicon glyphicon-calendar"
+                                              aria-hidden="true"></span> {{ message.create_time|date:"Y/n/j G:i" }}</h5>
+                <br>
+                <br>
+            </div>
+        {% endfor %}
+        <div>
+            <form action="#" method="post">
+                {% csrf_token %}
+                {{ form.name }}
+                {{ form.email }}
+                <br>
+                <br>
+                {{ form.content }}
+                <br>
+                <button type="submit" class="btn btn-primary">发 布</button>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}
