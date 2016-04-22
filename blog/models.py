@@ -6,7 +6,7 @@ from django.contrib.auth.models import (
 
 
 class Article(models.Model):
-    title_en = models.CharField(max_length=50, )
+    title_en = models.CharField(max_length=50, primary_key=True)
     title_cn = models.CharField(max_length=50)
     url = models.URLField()
     content_md = models.TextField()
@@ -54,7 +54,6 @@ class MyUserManager(BaseUserManager):
 
     def create_superuser(self, email, name, password):
 
-
         user = self.create_user(email=email,
                                 name=name,
                                 password=password,
@@ -101,3 +100,10 @@ class MyUser(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(MyUser)
+    content = models.CharField(max_length=200)
+    create_time = models.DateTimeField(auto_now=True)
+    floor = models.IntegerField()

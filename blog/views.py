@@ -8,7 +8,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.template.defaultfilters import lower
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import F
 from .forms import *
@@ -172,6 +172,24 @@ def login(request):
             return HttpResponseRedirect(url)
         else:
             return render(request, 'warning.html', {'information': '密码或账户不正确，请重试', 'back_url': 'ss'})
+
+
+class ArticleWithComment(SingleObjectMixin, ListView):
+    template_name = 'article_with_comments.html'
+    paginate_by = 10
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Article.objects)
+        self.object.view_times += 1
+        self.object.save()
+        return super(ArticleWithComment, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleWithComment, self).get_context_data(**kwargs)
+        context['article'] = self.object
+
+    def get_queryset(self):
+        return self.object.comment_set.all()
 
 
 def logout_user(request):

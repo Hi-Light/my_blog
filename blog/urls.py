@@ -6,7 +6,7 @@ urlpatterns = [
     url(r'^create/', ArticleCreateView.as_view(), name='create_view'),
     url(r'^index/', ArticleListView.as_view()),
     url(r'^article/(?P<title_en>\w+)/edit', ArticleEditView.as_view(), name='edit_view'),
-    url(r'^article/(?P<title_en>\w+)$', ArticleDetailView.as_view(), name='detail_view'),
+    url(r'^article/(?P<pk>\w+)$', ArticleWithComment.as_view(), name='detail_view'),
     url(r'^messageboard/', MessageView.as_view(), name='message_view'),
     url(r'^register/', UserCreationView, name='user_create_view'),
     url(r'^is_exist', is_exist, name='is_exist'),
