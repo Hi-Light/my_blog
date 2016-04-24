@@ -1,9 +1,16 @@
 body.base {
-    background-color: white;
+    background: url(../img/background.png) top;
+    font-size: 16px;
+    font-family: "Microsoft YaHei", "WenQuanYi Micro Hei", "sans-serif";
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Microsoft YaHei", "WenQuanYi Micro Hei", "sans-serif";
+    font-weight: 500;
 }
 
 p {
-    line-height: 150%
+    line-height: 1.6
 }
 
 span#name_result {
@@ -21,4 +28,49 @@ span#password1_result {
 span#password2_result {
     color: red;
 }
-/*body { padding-top: 70px; }*/
+
+body {
+
+}
+
+.navbar li:hover {
+    background-color: #d9534f;
+    text-decoration: none;
+
+    transition: all .15s ease-in-out;
+    -webkit-transition: all .15s ease-in-out;
+    -moz-transition: all .15s ease-in-out;
+    -o-transition: all .15s ease-in-out;
+}
+
+.navbar {
+    width: 100%;
+    border-radius: 0 !important;
+    border: 0px;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: white !important;
+}
+
+.navbar-inverse .navbar-brand {
+    color: white !important;
+    border-radius: 0 !important;
+    border: 0px;
+    height: 50.8px;
+}
+
+.navbar-inverse .navbar-brand:hover {
+    background-color: #d9534f;
+    text-decoration: none;
+
+    transition: all .15s ease-in-out;
+    -webkit-transition: all .15s ease-in-out;
+    -moz-transition: all .15s ease-in-out;
+    -o-transition: all .15s ease-in-out;
+}
+
+blockquote {
+    color: #777 !important;
+    font-size: 16px !important;
+}

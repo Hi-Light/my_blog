@@ -1,7 +1,5 @@
 import json
-
 from django.contrib import auth
-from django.contrib.auth import authenticate
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -54,22 +52,6 @@ class ArticleCreateView(AdminRequiredMixin, FormView):
         return super(ArticleCreateView, self).form_valid(form)
 
 
-# 显示文章详细页面的视图类
-class ArticleDetailView(DetailView):
-    template_name = 'article_detail.html'
-    context_object_name = 'article'
-
-    def get_object(self, **kwargs):
-        title = self.kwargs.get('title_en')
-        try:
-            article = Article.objects.get(title_en=title)
-            article.view_times += 1
-            article.save()
-        except Article.DoesNotExist:
-            raise Http404("文章不存在")
-        return article
-
-
 # 文章编辑界面，提取文章的原始内容，修改内容并提交保存
 class ArticleEditView(AdminRequiredMixin
     , FormView):
@@ -78,7 +60,6 @@ class ArticleEditView(AdminRequiredMixin
 
     def get_initial(self, **kwargs):
         title_en = self.kwargs.get('title_en')
-        print(title_en)
         try:
             self.article = Article.objects.get(title_en=title_en)
             initial = {
@@ -101,20 +82,22 @@ class ArticleEditView(AdminRequiredMixin
         return successful_url
 
 
-class MessageView(ListView, FormView):
+# 留言板
+class MessageView(ListView):
     template_name = 'message_board.html'
     model = Message
     context_object_name = "message_list"
-    form_class = MessageForm
-    success_url = '/messageboard/'
-    content_type = 'mmm'
 
-    def form_valid(self, form):
-        form.save()
-        return super(MessageView, self).form_valid(form)
+    def post(self, request):
+        content = request.POST['content']
+        user = request.user
+        floor = Message.objects.all().__len__() + 1
+        message = Message(author=user, content=content, floor=floor)
+        message.save()
+        return HttpResponseRedirect('/messageboard')
 
     def get_queryset(self, **kwargs):
-        message_list = Message.objects.all().order_by(F('create_time').desc())[:100]
+        message_list = Message.objects.all()
         paginator = Paginator(message_list, 10)
         page = self.request.GET.get('page')
         try:
@@ -128,7 +111,8 @@ class MessageView(ListView, FormView):
         return message_list
 
 
-def UserCreationView(request):
+# 注册一个新用户
+def create_user(request):
     if request.method == 'POST':
         url = request.POST['url']
         name = request.POST['name']
@@ -142,6 +126,7 @@ def UserCreationView(request):
         return render(request, 'register.html')
 
 
+# 注册时的验证函数
 def is_exist(request):
     name = request.POST['name']
     email = lower(request.POST['email'])
@@ -160,6 +145,7 @@ def is_exist(request):
     return HttpResponse(json.dumps({"msg_name": msg_name, "msg_email": msg_email}))
 
 
+# 登入用户
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -174,6 +160,7 @@ def login(request):
             return render(request, 'warning.html', {'information': '密码或账户不正确，请重试', 'back_url': 'ss'})
 
 
+# 带有回复的文章详细页面
 class ArticleWithComment(SingleObjectMixin, ListView):
     template_name = 'article_with_comments.html'
     paginate_by = 10
@@ -182,17 +169,36 @@ class ArticleWithComment(SingleObjectMixin, ListView):
         self.object = self.get_object(queryset=Article.objects)
         self.object.view_times += 1
         self.object.save()
-        return super(ArticleWithComment, self).get(request, *args, **kwargs)
+        return super(ArticleWithComment,
+                     self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ArticleWithComment, self).get_context_data(**kwargs)
         context['article'] = self.object
+        return context
 
     def get_queryset(self):
         return self.object.comment_set.all()
 
 
+# 注销用户
 def logout_user(request):
     url = request.GET['url']
     auth.logout(request)
     return HttpResponseRedirect(url)
+
+
+def create_comment(request, title_en):
+    if request.method == "POST":
+        url = request.get_full_path()[:-15]
+        content = request.POST['content']
+        user = request.user
+        article = Article.objects.get(title_en=title_en)
+        article.comment_times += 1
+        floor = article.comment_times
+        article.save()
+        comment = Comment(author=user, article=article, content=content, floor=floor)
+        comment.save()
+        return HttpResponseRedirect(url)
+    else:
+        return Http404

@@ -41,7 +41,7 @@ class ArticleCreateForm(forms.Form):
         content_html = markdown.markdown(cd['content'])
         soup = BeautifulSoup(content_html, 'lxml')
         content_text = soup.get_text()[:200] + '......'
-        url = 'http://127.0.0.1:8000/article/%s' % (title_en)
+        url = '/article/%s' % (title_en)
         if article:
             article.url = url
             article.title_cn = title_cn
@@ -68,8 +68,8 @@ class ArticleCreateForm(forms.Form):
 
 
 class MessageForm(forms.Form):
-    email = forms.EmailField(label="邮箱",widget=forms.TextInput(attrs={'class':'email_input','placeholder':"邮箱"}))
-    name = forms.CharField(label="名字",widget=forms.TextInput(attrs={'class': 'name_input', 'placeholder': '名字'}))
+    email = forms.EmailField(label="邮箱", widget=forms.TextInput(attrs={'class': 'email_input', 'placeholder': "邮箱"}))
+    name = forms.CharField(label="名字", widget=forms.TextInput(attrs={'class': 'name_input', 'placeholder': '名字'}))
     content = forms.CharField(widget=forms.Textarea)
 
     def save(self):

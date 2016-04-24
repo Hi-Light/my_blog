@@ -9,7 +9,6 @@
             <div class="col-md-8">
                 {% for article in article_list %}
                     {% include 'article_display.html' %}
-                    <br>
                 {% endfor %}
                 <nav>
                     <ul class="pager">
@@ -37,7 +36,8 @@
     </div>
 
 {% endblock %}
-
 {% block scripts %}
-
+    <script>
+            document.getElementById("index").style.backgroundColor = "#d9534f";
+    </script>
 {% endblock %}

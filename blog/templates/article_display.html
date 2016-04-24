@@ -1,26 +1,33 @@
 {% block content %}
     <div class="panel panel-default article_display">
+        <div class="data-article hidden-xs">
+            <span class="month">{{ article.create_time|date:"n" }}月</span>
+            <span class="day">{{ article.create_time|date:"j" }}</span>
+        </div>
         <div class="panel-body">
-
-            <h3 class="article_title"><a href="{{ article.url }}">{{ article.title_cn }}</a></h3>
+            <h1 class="article_title"><a href="{{ article.url }}">{{ article.title_cn }}</a></h1>
             <div class="article_info">
+                <small>
                         <span class="glyphicon glyphicon-calendar"
-                              aria-hidden="true"></span> {{ article.create_time|date:"Y/n/j G:i" }}
-                &nbsp;<span
-                    class="glyphicon glyphicon-eye-open"
-                    aria-hidden="true"></span>&nbsp;{{ article.view_times }}&nbsp;&nbsp;<span
-                    class="glyphicon glyphicon-comment"
-                    aria-hidden="true"></span>&nbsp{{ article.comment_times }}
-                {% for tag in article.get_tags %}
-                    <p class="label label-warning pull-right"><span class="glyphicon glyphicon-tag"
-                                                                    aria-hidden="true"></span> {{ tag }}</p>
-                    <span class="pull-right"> &nbsp;&nbsp;</span>
-                {% endfor %}
+                              aria-hidden="true"></span> {{ article.create_time|date:"Y/n/j" }}
+                    &nbsp;<span
+                        class="glyphicon glyphicon-eye-open"
+                        aria-hidden="true"></span>&nbsp;{{ article.view_times }}&nbsp;&nbsp;<span
+                        class="glyphicon glyphicon-comment"
+                        aria-hidden="true"></span>&nbsp{{ article.comment_times }}
+                    {% for tag in article.get_tags %}
+                        <p class="label label-warning pull-right"><span class="glyphicon glyphicon-tag"
+                                                                        aria-hidden="true"></span> {{ tag }}</p>
+                        <span class="pull-right"> &nbsp;&nbsp;</span>
+                    {% endfor %}
+                </small>
             </div>
             <div class="article_show">
                 <p align="left" class="content">{{ article.content_text }}
                 </p>
-                <a type="button" class="btn btn-success pull-right" href='{{ article.url }}'>查看详细
+                <a href='{{ article.url }}'
+                   class="button button-glow button-border button-rounded button-primary pull-right">
+                    查看详细
                 </a>
             </div>
         </div>

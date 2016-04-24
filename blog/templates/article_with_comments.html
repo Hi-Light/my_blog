@@ -10,38 +10,94 @@
     <div class="container form">
         <div class="row">
             <div class="col-md-8">
-                <div class="article">
-                    <h1>{{ article.title_cn }}</h1>
-                    <div class="article-info">
-                        <p class="pull-right" title="发表日期"> <span class="glyphicon glyphicon-calendar"
-                                                                  aria-hidden="true"></span>{{ article.create_time|date:"Y/n/j G:i" }}
-                        </p>
-                        <p class="pull-right author" title="作者"><span class="glyphicon glyphicon-pencil"
-                                                                      aria-hidden="true"></span>{{ article.author }}&nbsp
-                        </p>
-
-                        <p class="label label-primary pull-left"><span class="glyphicon glyphicon-tags"
-                                                                       aria-hidden="true"></span> 文章标签： </p>
-                        <p class="pull-left">&nbsp;&nbsp;</p>
-                        {% for tag in article.get_tags %}
-                            <p class="label label-info pull-left"><span class="glyphicon glyphicon-tag"
-                                                                        aria-hidden="true"></span> {{ tag }}</p>
-                            <p class="pull-left">&nbsp;&nbsp;</p>
-                        {% endfor %}
-                        <span title="阅读次数" class="pull-left"><span class="glyphicon glyphicon-eye-open"
-                                                                   aria-hidden="true"></span>&times;{{ article.view_times }}</span>
-                    </div>
-                    <div class="article-content">
-                        {% autoescape off %}
-                            {{ article.content_html }}
-                        {% endautoescape %}
-                        <p class="updated">---------- 全文完（最近更新于 {{ object.update_time|date:"Y/n/j G:i" }}）
-                            ----------</p>
-                        {#                        {% if user.is_staff %}#}
-                        <a class="btn btn-primary" href="{{ article.url }}/edit" role="button">重新编辑</a>
-                        {#                        {% endif %}#}
+                <div class="article panel panel-default">
+                    <div class="panel-body">
+                        <h1>{{ article.title_cn }}</h1>
+                        <div class="article-info">
+                        <span class="pull-right" title="发表日期"> <span class="glyphicon glyphicon-calendar"
+                                                                     aria-hidden="true"></span>{{ article.create_time|date:"Y/n/j G:i" }}
+                        </span>
+                        <span class="label label-primary pull-left hidden-xs"><span class="glyphicon glyphicon-tags"
+                                                                                    aria-hidden="true"></span> 文章标签： </span>
+                            <span class="pull-left">&nbsp;&nbsp;</span>
+                            {% for tag in article.get_tags %}
+                                <span class="label label-info pull-left"><span class="glyphicon glyphicon-tag"
+                                                                               aria-hidden="true"></span> {{ tag }}</span>
+                                <span class="pull-left">&nbsp;&nbsp;</span>
+                            {% endfor %}
+                            <span title="阅读次数" class="pull-left"><span class="glyphicon glyphicon-eye-open"
+                                                                       aria-hidden="true"></span>&times;{{ article.view_times }}</span>
+                        </div>
+                        <div class="article-content">
+                            {% autoescape off %}
+                                {{ article.content_html }}
+                            {% endautoescape %}
+                            <p class="updated">---------- 全文完（最近更新于 {{ object.update_time|date:"Y/n/j G:i" }}）
+                                ----------</p>
+                            {% if user.is_staff %}
+                                <a class="btn btn-primary" href="{{ article.url }}/edit" role="button">重新编辑</a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
+                <div class="comment-input panel panel-default">
+                    <div class="panel-body" id="create-comment">
+                        <form method="post" action="/article/{{ article.title_en }}/create_comment">
+                            {% csrf_token %}
+                            {% if user.is_authenticated %}
+                                <textarea class="form-control" rows="3" name="content" placeholder="说点什么吧"></textarea>
+                                <br>
+                                <input type="submit"
+                                       class="button button-glow button-border button-rounded button-primary pull-right">
+                            {% else %}
+                                <textarea class="form-control" rows="3" name="content" readonly> 登陆后即可评论 </textarea>
+                                <br>
+                                <a class="button button-glow button-border button-rounded button-primary pull-right"
+                                   onclick="$('#myModal-login').modal('show')">现在登录</a>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                {% for comment in page_obj %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <small class="gray">
+                                <div class="pull-right">&nbsp;{{ comment.floor }}楼</div>
+                                <a class="pull-right" href="#create-comment"
+                                   onclick="$('.form-control').text('[回复#{{ comment.floor }}楼] @{{ comment.author.name }} ')">回复</a>
+                            </small>
+                            <div class="">
+                                <strong>{{ comment.author.name }}</strong>&nbsp;
+                                <small class="gray">
+                                    {{ comment.create_time| date:"Y/n/j G:i" }}
+                                </small>
+                            </div>
+                            <div class="comment-info">{{ comment.content }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {#如果留言超过一页，显示分页标志#}
+                {% if page_obj.paginator.num_pages > 1 %}
+                    <nav>
+                        <ul class="pager">
+                            <li class="current">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</li>
+                            {% if page_obj.has_previous %}
+                                <li class="previous"><a href="?page={{ page_obj.previous_page_number }}"><span
+                                        aria-hidden="true">&larr;</span> 上一页</a></li>
+                            {% else %}
+                                <li class="previous disabled"><a href=""><span aria-hidden="true">&larr;</span> 上一页</a>
+                                </li>
+                            {% endif %}
+                            {% if page_obj.has_next %}
+                                <li class="next"><a href="?page={{ page_obj.next_page_number }}">下一页 <span
+                                        aria-hidden="true">&rarr;</span></a></li>
+                            {% else %}
+                                <li class="next disabled"><a href="">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
             </div>
             <div class="line">
             </div>

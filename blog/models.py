@@ -8,7 +8,7 @@ from django.contrib.auth.models import (
 class Article(models.Model):
     title_en = models.CharField(max_length=50, primary_key=True)
     title_cn = models.CharField(max_length=50)
-    url = models.URLField()
+    url = models.CharField(max_length=50)
     content_md = models.TextField()
     content_html = models.TextField()
     content_text = models.TextField()
@@ -17,7 +17,7 @@ class Article(models.Model):
     create_time = models.DateTimeField(auto_now=False)
     update_time = models.DateTimeField(auto_now_add=True)
     comment_times = models.IntegerField(default=0)
-    auther = models.CharField(max_length=100, default='高亮')
+    author = models.CharField(max_length=100, default='高亮')
 
     def get_tags(self):
         tags_list = self.tags.split(',')
@@ -31,13 +31,6 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title_cn
-
-
-class Message(models.Model):
-    email = models.EmailField()
-    name = models.CharField(max_length=20)
-    content = models.TextField()
-    create_time = models.DateTimeField(auto_now_add=True)
 
 
 class MyUserManager(BaseUserManager):
@@ -103,6 +96,14 @@ class MyUser(AbstractBaseUser):
 
 
 class Comment(models.Model):
+    author = models.ForeignKey(MyUser)
+    article = models.ForeignKey(Article, null=True)
+    content = models.CharField(max_length=200)
+    create_time = models.DateTimeField(auto_now=True)
+    floor = models.IntegerField()
+
+
+class Message(models.Model):
     author = models.ForeignKey(MyUser)
     content = models.CharField(max_length=200)
     create_time = models.DateTimeField(auto_now=True)

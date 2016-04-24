@@ -3,12 +3,31 @@
     border-bottom: 1px solid #ddd;
     height: 30px;
 }
-.col-md-8{
+
+.col-md-8 {
     border-right: 2px solid #ddd;
 }
-.article-content{
+
+.article-content {
     padding-top: 5px;
 }
-.article-content img{
+
+.article-content img {
     width: 100%;
+}
+
+.gray {
+    color: gray;
+}
+
+.article {
+    padding-bottom: 20px;
+}
+
+.article {
+    background: white;
+}
+
+.panel-default {
+    box-shadow: 0 0px 5px #c2c2c2;
 }

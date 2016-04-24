@@ -4,31 +4,52 @@
     <link rel="stylesheet" href="{% static 'css/message_board.css' %}">
 {% endblock %}
 {% block content %}
-
     <div class="container" xmlns="http://www.w3.org/1999/html">
-        {% for message in message_list %}
-            <div class="alert alert-info" role="alert">
-                {{ message.content }}
-
-                <h5> {{ message.name }} {{ message.email }} <span class="glyphicon glyphicon-calendar"
-                                              aria-hidden="true"></span> {{ message.create_time|date:"Y/n/j G:i" }}</h5>
-                <br>
-                <br>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="comment-input panel panel-default">
+                    <div class="panel-body" id="create-comment">
+                        <form method="post" action="{% url 'message_view' %}">
+                            {% csrf_token %}
+                            {% if user.is_authenticated %}
+                                <textarea class="form-control" rows="3" name="content"
+                                          placeholder="既然来了，那就留下点什么吧"></textarea>
+                                <br>
+                                <input type="submit"
+                                       class="button button-glow button-border button-rounded button-primary pull-right">
+                            {% else %}
+                                <textarea class="form-control" rows="3" name="content" readonly> 登陆后即可评论 </textarea>
+                                <br>
+                                <a class="button button-glow button-border button-rounded button-primary pull-right"
+                                   onclick="$('#myModal-login').modal('show')">现在登录</a>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                {% for message in message_list %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <small class="gray">
+                                <div class="pull-right">&nbsp;{{ message.floor }}楼</div>
+                                <a class="pull-right" href="#create-comment"
+                                   onclick="$('.form-control').text('[回复#{{ message.floor }}楼] @{{ message.author.name }} ')">回复</a>
+                            </small>
+                            <div class="">
+                                <strong>{{ message.author.name }}</strong>&nbsp;
+                                <small class="gray">
+                                    {{ message.create_time| date:"Y/n/j G:i" }}
+                                </small>
+                            </div>
+                            <div class="comment-info">{{ message.content }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-        <div>
-            <form action="#" method="post">
-                {% csrf_token %}
-                {{ form.name }}
-                {{ form.email }}
-                <br>
-                <br>
-                {{ form.content }}
-                <br>
-                <button type="submit" class="btn btn-primary">发 布</button>
-            </form>
         </div>
     </div>
-
-
+{% endblock %}
+{% block scripts %}
+    <script>
+        document.getElementById("messageboard").style.backgroundColor = "#d9534f";
+    </script>
 {% endblock %}
