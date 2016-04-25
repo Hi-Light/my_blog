@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'auth_system'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -117,4 +118,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'blog.MyUser'
+AUTH_USER_MODEL = 'auth_system.MyUser'

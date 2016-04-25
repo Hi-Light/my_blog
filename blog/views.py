@@ -9,6 +9,8 @@ from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import F
+
+from auth_system.models import MyUser
 from .forms import *
 from .models import *
 
@@ -126,40 +128,6 @@ def create_user(request):
         return render(request, 'register.html')
 
 
-# 注册时的验证函数
-def is_exist(request):
-    name = request.POST['name']
-    email = lower(request.POST['email'])
-    if MyUser.objects.filter(name=name).__len__():
-        msg_name = '用户名已存在，换一个吧'
-    else:
-        msg_name = ''
-    if name == '':
-        msg_name = '请输入用户名'
-    if MyUser.objects.filter(email=email).__len__():
-        msg_email = '邮箱已被使用，换一个吧'
-    else:
-        msg_email = ''
-    if email == '':
-        msg_email = ''
-    return HttpResponse(json.dumps({"msg_name": msg_name, "msg_email": msg_email}))
-
-
-# 登入用户
-def login(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        url = request.POST['url']
-        a = MyUser.objects.filter(email=email)
-        user = auth.authenticate(username=email, password=password)
-        if user is not None:
-            auth.login(request, user)
-            return HttpResponseRedirect(url)
-        else:
-            return render(request, 'warning.html', {'information': '密码或账户不正确，请重试', 'back_url': 'ss'})
-
-
 # 带有回复的文章详细页面
 class ArticleWithComment(SingleObjectMixin, ListView):
     template_name = 'article_with_comments.html'
@@ -181,13 +149,6 @@ class ArticleWithComment(SingleObjectMixin, ListView):
         return self.object.comment_set.all()
 
 
-# 注销用户
-def logout_user(request):
-    url = request.GET['url']
-    auth.logout(request)
-    return HttpResponseRedirect(url)
-
-
 def create_comment(request, title_en):
     if request.method == "POST":
         url = request.get_full_path()[:-15]
@@ -201,4 +162,4 @@ def create_comment(request, title_en):
         comment.save()
         return HttpResponseRedirect(url)
     else:
-        return Http404
+        raise Http404

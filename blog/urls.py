@@ -10,7 +10,4 @@ urlpatterns = [
     url(r'^article/(?P<pk>\w+)$', ArticleWithComment.as_view(), name='detail_view'),
     url(r'^messageboard/', MessageView.as_view(), name='message_view'),
     url(r'^register/', create_user, name='user_create_view'),
-    url(r'^is_exist', is_exist, name='is_exist'),
-    url(r'^login/', login, name='login'),
-    url(r'^logout', logout_user, name='logout')
 ]
