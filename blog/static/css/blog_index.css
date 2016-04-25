@@ -57,6 +57,7 @@ span.label {
     top: -20px;
     color: #fff;
     padding-top: 10px;
+    box-shadow: 0 0px 5px #c2c2c2;
 }
 .article_display h1 a:hover {
     color: #d9534f;

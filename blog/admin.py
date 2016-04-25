@@ -9,8 +9,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 admin.site.register(Article)
 admin.site.register(Message)
-
 admin.site.register(MyUser)
 admin.site.unregister(Group)
-
 admin.site.register(Comment)
+
+
+
+
