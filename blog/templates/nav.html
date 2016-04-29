@@ -19,6 +19,16 @@
                 <li id="messageboard">
                     <a href="{% url 'message_view' %}"><span class="glyphicon glyphicon-send"
                                                              aria-hidden="true"></span>&nbsp;&nbsp;留言板</a></li>
+                <li id="Python">
+                    <a href="/type/Python">Python</a></li>
+                <li id="Java">
+                    <a href="/type/Java">Java</a></li>
+                <li id="Django">
+                    <a href="/type/Django">Django</a></li>
+                <li id="Android">
+                    <a href="/type/Android">Android</a></li>
+                <li id="eassy">
+                    <a href="{% url 'message_view' %}">随笔</a></li>
             </ul>
             {% if user.is_authenticated %}
                 <ul class="nav navbar-nav navbar-right">

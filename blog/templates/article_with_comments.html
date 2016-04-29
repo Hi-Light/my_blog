@@ -11,9 +11,16 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="article panel panel-default">
+
                     <div class="panel-body">
+                        <ol class="breadcrumb">
+                            <li><a href="/index">Home</a></li>
+                            <li><a href="/type/{{ article.get_type_display }}">{{ article.get_type_display }}</a></li>
+                            <li class="active">{{ article.title_cn }}</li>
+                        </ol>
                         <h1>{{ article.title_cn }}</h1>
                         <div class="article-info">
+
                         <span class="pull-right" title="发表日期"> <span class="glyphicon glyphicon-calendar"
                                                                      aria-hidden="true"></span>{{ article.create_time|date:"Y/n/j G:i" }}
                         </span>

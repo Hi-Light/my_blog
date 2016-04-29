@@ -32,11 +32,17 @@
 
             <div class="col-md-4">
                 <br>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Panel heading without title</div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">文章分类</div>
+                    <!-- List group -->
+                    <ul class="list-group">
+                        <a href="/type/Python" class="list-group-item"><span class="badge">{{ python_len }}</span>Python</a>
+                        <a href="/type/Java" class="list-group-item"><span class="badge">14</span>Java</a>
+                        <a href="/type/DJango" class="list-group-item"><span class="badge">14</span>Django</a>
+                        <a href="/type/essay" class="list-group-item"><span class="badge">14</span>杂项</a>
+                        <a href="/type/Android" class="list-group-item"><span class="badge">14</span>Android</a>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -45,6 +51,6 @@
 {% endblock %}
 {% block scripts %}
     <script>
-        document.getElementById("index").style.backgroundColor = "#d9534f";
+        document.getElementById("{{ type }}").style.backgroundColor = "#d9534f";
     </script>
 {% endblock %}

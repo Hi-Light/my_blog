@@ -2,12 +2,10 @@ import datetime
 import re
 import markdown
 from bs4 import BeautifulSoup
-
 from django import forms
-
 from .models import Article, Message
-
 import datetime
+from .models import type_choices
 
 
 class ArticleCreateForm(forms.Form):
@@ -26,18 +24,18 @@ class ArticleCreateForm(forms.Form):
         min_length=10,
         widget=forms.Textarea(),
     )
-    tags = forms.CharField(
-        label=u'标签',
-        max_length=30,
-        widget=forms.TextInput(attrs={'class': '', 'placeholder': '文章标签，用英文逗号分割'}),
+    type = forms.ChoiceField(
+        choices=type_choices,
+        widget=forms.Select
     )
 
     def save(self, username='高亮', article=None):
         cd = self.cleaned_data
+        print(cd)
         title_en = cd['title_en']
         title_cn = cd['title_cn']
         content_md = cd['content']
-        tags = cd['tags']
+        type = cd['type']
         content_html = markdown.markdown(cd['content'])
         soup = BeautifulSoup(content_html, 'lxml')
         content_text = soup.get_text()[:200] + '......'
@@ -50,7 +48,7 @@ class ArticleCreateForm(forms.Form):
             article.content_html = content_html
             article.content_text = content_text
             article.update_time = datetime.datetime.now()
-            article.tags = tags
+            type = type
         else:
             article = Article(
                 url=url,
@@ -58,11 +56,11 @@ class ArticleCreateForm(forms.Form):
                 title_en=title_en,
                 content_md=content_md,
                 content_html=content_html,
-                tags=tags,
                 view_times=0,
                 comment_times=0,
                 content_text=content_text,
-                create_time=datetime.datetime.now()
+                create_time=datetime.datetime.now(),
+                type=type
             )
         article.save()
 

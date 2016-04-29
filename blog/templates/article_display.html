@@ -15,11 +15,9 @@
                         aria-hidden="true"></span>&nbsp;{{ article.view_times }}&nbsp;&nbsp;<span
                         class="glyphicon glyphicon-comment"
                         aria-hidden="true"></span>&nbsp{{ article.comment_times }}
-                    {% for tag in article.get_tags %}
-                        <p class="label label-warning pull-right"><span class="glyphicon glyphicon-tag"
-                                                                        aria-hidden="true"></span> {{ tag }}</p>
-                        <span class="pull-right"> &nbsp;&nbsp;</span>
-                    {% endfor %}
+                    <a href="/type/{{ article.type }}" class="label label-warning pull-right"><span
+                            class="glyphicon glyphicon-tag"
+                            aria-hidden="true"></span> {{ article.type }}</a>
                 </small>
             </div>
             <div class="article_show">

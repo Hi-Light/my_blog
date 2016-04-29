@@ -1,4 +1,6 @@
 import json
+
+from django.template import context
 from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, HttpResponse, Http404, HttpResponseRedirect
@@ -9,8 +11,6 @@ from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import F
-
-from auth_system.models import MyUser
 from .forms import *
 from .models import *
 
@@ -23,15 +23,38 @@ class AdminRequiredMixin(object):
         return staff_member_required(view)
 
 
+class BaseMixin(object):
+    def get_context_data(self, *args, **kwargs):
+        context = super(BaseMixin, self).get_context_data(**kwargs)
+        try:
+            context['hot_article'] = Article.objects.order_by('-view_times')[0:10]
+            context['new_commnet'] = Comment.objects.order_by('-create_time')[0:10]
+            context['python_len'] = Article.objects.filter(type='Python').__len__()
+        except Exception as e:
+            raise AttributeError('信息不正确')
+        return context
+
+
 # 文章列表视图类，以列表的形式显示文章的提要
-class ArticleListView(ListView):
+class ArticleListView(BaseMixin, ListView):
     template_name = 'index.html'
     context_object_name = 'article_list'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(ArticleListView, self).get_context_data()
+        context['type'] = self.kwargs.get('type')
+        return context
+
     def get_queryset(self, **kwargs):
-        article_list = Article.objects.all().order_by(F('create_time').desc())[:100]
-        paginator = Paginator(article_list, 5)
-        page = self.request.GET.get('page')
+        type = self.kwargs.get('type')
+        if type == None:
+            article_list = Article.objects.all().order_by(F('create_time').desc())[:100]
+            paginator = Paginator(article_list, 5)
+            page = self.request.GET.get('page')
+        else:
+            article_list = Article.objects.filter(type=type).order_by(F('create_time').desc())[:100]
+            paginator = Paginator(article_list, 5)
+            page = self.request.GET.get('page')
         try:
             article_list = paginator.page(page)
         except PageNotAnInteger:

@@ -5,27 +5,29 @@ from django.contrib.auth.models import (
 )
 
 from auth_system.models import MyUser
+type_choices = (
+    ['Python', 'Python'],
+    ['Django', 'Django'],
+    ['Java', 'Java'],
+    ['Android', 'Android'],
+    ['others', '杂项'],
+    ['essay', '随笔']
+)
 
 
 class Article(models.Model):
     title_en = models.CharField(max_length=50, primary_key=True)
     title_cn = models.CharField(max_length=50)
+    type = models.CharField(max_length=20, choices=type_choices)
     url = models.CharField(max_length=50)
     content_md = models.TextField()
     content_html = models.TextField()
     content_text = models.TextField()
-    tags = models.CharField(max_length=50, verbose_name="标签组", help_text="务必用英文逗号分割")
     view_times = models.IntegerField(default=0)
     create_time = models.DateTimeField(auto_now=False)
     update_time = models.DateTimeField(auto_now_add=True)
     comment_times = models.IntegerField(default=0)
     author = models.CharField(max_length=100, default='高亮')
-
-    def get_tags(self):
-        tags_list = self.tags.split(',')
-        while '' in tags_list:
-            tags_list.remove('')
-        return tags_list
 
     class Meta:
         ordering = ['create_time']
@@ -33,8 +35,6 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title_cn
-
-
 
 
 class Comment(models.Model):

@@ -70,3 +70,8 @@ img {
     font-weight: bold;
     margin-top: -5px;
 }
+
+.content {
+    color: gray;
+    font-size: 14px;
+}
