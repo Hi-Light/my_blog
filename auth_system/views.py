@@ -47,5 +47,6 @@ def login(request):
 # 注销用户
 def logout_user(request):
     url = request.GET['url']
+    print(url)
     auth.logout(request)
     return HttpResponseRedirect(url)

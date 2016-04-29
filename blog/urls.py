@@ -1,4 +1,6 @@
 from django.conf.urls import url, include
+from django.views.generic import RedirectView
+
 from blog.views import *
 
 urlpatterns = [
@@ -9,5 +11,5 @@ urlpatterns = [
     url(r'^article/(?P<title_en>\w+)/edit', ArticleEditView.as_view(), name='edit_view'),
     url(r'^article/(?P<pk>\w+)$', ArticleWithComment.as_view(), name='detail_view'),
     url(r'^messageboard/', MessageView.as_view(), name='message_view'),
-    url(r'^register/', create_user, name='user_create_view'),
+    url(r'^register/', create_user, name='user_create_view')
 ]

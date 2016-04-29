@@ -1,27 +1,10 @@
 
-
-pre.create_time {
-
-}
-
 .article_info {
     padding-bottom: 10px;
 }
 
-hr {
-}
-
-button.btn-success {
-}
-
 img {
     float: left;
-}
-
-body.base {
-}
-
-span.label {
 }
 
 .article_info {
@@ -37,18 +20,20 @@ span.label {
     box-shadow: 0 0px 5px #c2c2c2;
     position: relative;
 }
-.article_display h1 a{
-	color: #3d4450;
-}
-.article_display h1{
-	font-size: 32px;
-	margin: 0 auto;
-	text-align:center;
+
+.article_display h1 a {
+    color: #3d4450;
 }
 
-.data-article{
-	background-color: #d9534f;
-	border-color: #d43f3a;
+.article_display h1 {
+    font-size: 32px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.data-article {
+    background-color: #d9534f;
+    border-color: #d43f3a;
     position: absolute;
     height: 70px;
     width: 70px;
@@ -59,6 +44,7 @@ span.label {
     padding-top: 10px;
     box-shadow: 0 0px 5px #c2c2c2;
 }
+
 .article_display h1 a:hover {
     color: #d9534f;
     text-decoration: none;
@@ -70,17 +56,17 @@ span.label {
 }
 
 .data-article span.month,
-.data-article  span.day{
-	text-align: center;
-	display: block;
+.data-article span.day {
+    text-align: center;
+    display: block;
 }
 
-.data-article span.month{
-	margin: 0;
+.data-article span.month {
+    margin: 0;
 }
 
-.data-article span.day{
-	font-size: 30px;
-	font-weight: bold;
-	margin-top: -5px;
+.data-article span.day {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: -5px;
 }

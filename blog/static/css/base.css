@@ -29,10 +29,6 @@ span#password2_result {
     color: red;
 }
 
-body {
-
-}
-
 .navbar li:hover {
     background-color: #d9534f;
     text-decoration: none;
