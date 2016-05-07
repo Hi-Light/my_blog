@@ -31,3 +31,13 @@
 .panel-default {
     box-shadow: 0 0px 5px #c2c2c2;
 }
+
+a:hover {
+    color: #d9534f;
+    text-decoration: none;
+
+    transition: all .25s ease-in-out;
+    -webkit-transition: all .25s ease-in-out;
+    -moz-transition: all .25s ease-in-out;
+    -o-transition: all .25s ease-in-out;
+}

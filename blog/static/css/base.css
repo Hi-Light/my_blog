@@ -68,3 +68,17 @@ blockquote {
     color: #777 !important;
     font-size: 16px !important;
 }
+
+#catalog {
+    box-shadow: 0 0px 5px #c2c2c2;
+}
+
+#hot_article{
+    box-shadow: 0 0px 5px #c2c2c2 !important;
+}
+#new_comments{
+    box-shadow: 0 0px 5px #c2c2c2 !important;
+}
+#hot_article{
+    box-shadow: 0 0px 5px #c2c2c2 !important;
+}

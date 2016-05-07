@@ -32,25 +32,16 @@
 
             <div class="col-md-4">
                 <br>
-                <div class="panel panel-default">
-                    <!-- Default panel contents -->
-                    <div class="panel-heading">文章分类</div>
-                    <!-- List group -->
-                    <ul class="list-group">
-                        <a href="/type/Python" class="list-group-item"><span class="badge">{{ python_len }}</span>Python</a>
-                        <a href="/type/Java" class="list-group-item"><span class="badge">14</span>Java</a>
-                        <a href="/type/DJango" class="list-group-item"><span class="badge">14</span>Django</a>
-                        <a href="/type/essay" class="list-group-item"><span class="badge">14</span>杂项</a>
-                        <a href="/type/Android" class="list-group-item"><span class="badge">14</span>Android</a>
-                    </ul>
-                </div>
+                {% include 'catalog.html' %}
+                {% include 'hot_articles.html' %}
+                {% include 'new_comments.html' %}
             </div>
         </div>
     </div>
-
 {% endblock %}
 {% block scripts %}
     <script>
         document.getElementById("{{ type }}").style.backgroundColor = "#d9534f";
+        document.getElementById("{{ type }}-right").setAttribute("class", "active list-group-item");
     </script>
 {% endblock %}

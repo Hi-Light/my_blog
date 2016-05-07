@@ -1,0 +1,11 @@
+<div id='catalog' class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">文章分类</div>
+    <!-- List group -->
+    <ul class="list-group">
+        {% for type in types %}
+            <a id="{{ type.name_en }}-right" href="/type/{{ type.name_en }}" class="list-group-item"><span
+                    class="badge">{{ type.article_numbers }}</span>{{ type.name }}</a>
+        {% endfor %}
+    </ul>
+</div>

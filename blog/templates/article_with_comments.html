@@ -15,7 +15,7 @@
                     <div class="panel-body">
                         <ol class="breadcrumb">
                             <li><a href="/index">Home</a></li>
-                            <li><a href="/type/{{ article.get_type_display }}">{{ article.get_type_display }}</a></li>
+                            <li><a href="/type/{{ article.type.name_en }}">{{ article.type }}</a></li>
                             <li class="active">{{ article.title_cn }}</li>
                         </ol>
                         <h1>{{ article.title_cn }}</h1>
@@ -24,16 +24,10 @@
                         <span class="pull-right" title="发表日期"> <span class="glyphicon glyphicon-calendar"
                                                                      aria-hidden="true"></span>{{ article.create_time|date:"Y/n/j G:i" }}
                         </span>
-                        <span class="label label-primary pull-left hidden-xs"><span class="glyphicon glyphicon-tags"
-                                                                                    aria-hidden="true"></span> 文章标签： </span>
-                            <span class="pull-left">&nbsp;&nbsp;</span>
-                            {% for tag in article.get_tags %}
                                 <span class="label label-info pull-left"><span class="glyphicon glyphicon-tag"
-                                                                               aria-hidden="true"></span> {{ tag }}</span>
-                                <span class="pull-left">&nbsp;&nbsp;</span>
-                            {% endfor %}
-                            <span title="阅读次数" class="pull-left"><span class="glyphicon glyphicon-eye-open"
-                                                                       aria-hidden="true"></span>&times;{{ article.view_times }}</span>
+                                                                               aria-hidden="true"></span> {{ article.type }}</span>
+                            <span title="阅读次数" class="pull-left">  <span class="glyphicon glyphicon-eye-open"
+                                                                         aria-hidden="true"></span>&times;{{ article.view_times }}</span>
                         </div>
                         <div class="article-content">
                             {% autoescape off %}
@@ -105,6 +99,13 @@
                         </ul>
                     </nav>
                 {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <br>
+                {% include 'catalog.html' %}
+                {% include 'hot_articles.html' %}
+                {% include 'new_comments.html' %}
             </div>
             <div class="line">
             </div>

@@ -22,14 +22,14 @@ class AdminRequiredMixin(object):
         view = super(AdminRequiredMixin, cls).as_view(**initkwargs)
         return staff_member_required(view)
 
-
+# 基本类
 class BaseMixin(object):
     def get_context_data(self, *args, **kwargs):
         context = super(BaseMixin, self).get_context_data(**kwargs)
         try:
             context['hot_article'] = Article.objects.order_by('-view_times')[0:10]
             context['new_commnet'] = Comment.objects.order_by('-create_time')[0:10]
-            context['python_len'] = Article.objects.filter(type='Python').__len__()
+            context['types'] = Type.objects.all()
         except Exception as e:
             raise AttributeError('信息不正确')
         return context
@@ -52,7 +52,10 @@ class ArticleListView(BaseMixin, ListView):
             paginator = Paginator(article_list, 5)
             page = self.request.GET.get('page')
         else:
-            article_list = Article.objects.filter(type=type).order_by(F('create_time').desc())[:100]
+            try:
+                article_list = Type.objects.get(name_en=type).article_set.all()
+            except Exception as e:
+                raise AttributeError('该分类不存在')
             paginator = Paginator(article_list, 5)
             page = self.request.GET.get('page')
         try:
@@ -67,7 +70,7 @@ class ArticleListView(BaseMixin, ListView):
 
 
 # 创建文章的视图类，用于显示编辑器并获取表单提交的数据
-class ArticleCreateView(AdminRequiredMixin, FormView):
+class ArticleCreateView(BaseMixin, AdminRequiredMixin, FormView):
     template_name = 'article_create.html'
     form_class = ArticleCreateForm
     success_url = '/index/'
@@ -78,7 +81,7 @@ class ArticleCreateView(AdminRequiredMixin, FormView):
 
 
 # 文章编辑界面，提取文章的原始内容，修改内容并提交保存
-class ArticleEditView(AdminRequiredMixin
+class ArticleEditView(BaseMixin, AdminRequiredMixin
     , FormView):
     template_name = 'article_create.html'
     form_class = ArticleCreateForm
@@ -91,7 +94,7 @@ class ArticleEditView(AdminRequiredMixin
                 'title_en': title_en,
                 'title_cn': self.article.title_cn,
                 'content': self.article.content_md,
-                'tags': self.article.tags
+                'type': self.article.type.name
             }
             return initial
         except Article.DoesNotExist:
@@ -108,7 +111,7 @@ class ArticleEditView(AdminRequiredMixin
 
 
 # 留言板
-class MessageView(ListView):
+class MessageView(BaseMixin, ListView):
     template_name = 'message_board.html'
     model = Message
     context_object_name = "message_list"
@@ -137,7 +140,7 @@ class MessageView(ListView):
 
 
 # 注册一个新用户
-def create_user(request):
+def create_user(BaseMixin, request):
     if request.method == 'POST':
         url = request.POST['url']
         name = request.POST['name']
@@ -152,7 +155,7 @@ def create_user(request):
 
 
 # 带有回复的文章详细页面
-class ArticleWithComment(SingleObjectMixin, ListView):
+class ArticleWithComment(BaseMixin, SingleObjectMixin, ListView):
     template_name = 'article_with_comments.html'
     paginate_by = 10
 

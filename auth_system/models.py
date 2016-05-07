@@ -33,10 +33,10 @@ class MyUser(AbstractBaseUser):
         return ' '
 
     email = models.EmailField(
-        verbose_name='email address',
+        verbose_name='邮箱',
         unique=True,
     )
-    name = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=10, unique=True, verbose_name='用户名')
     objects = MyUserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
@@ -44,8 +44,8 @@ class MyUser(AbstractBaseUser):
     def get_full_name(self):
         return self.name
 
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True,verbose_name='已激活')
+    is_admin = models.BooleanField(default=False,verbose_name='管理员')
 
     def __str__(self):
         return self.name + ' ' + self.email
@@ -66,3 +66,5 @@ class MyUser(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
+    class Meta:
+        verbose_name = verbose_name_plural = '账户'

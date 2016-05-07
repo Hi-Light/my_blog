@@ -12,6 +12,7 @@ admin.site.register(Message)
 admin.site.register(MyUser)
 admin.site.unregister(Group)
 admin.site.register(Comment)
+admin.site.register(Type)
 
 
 

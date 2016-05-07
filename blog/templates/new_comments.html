@@ -1,0 +1,12 @@
+<div class="panel panel-default" id="new_comments">
+    <!-- Default panel contents -->
+    <div class="panel-heading">最新评论</div>
+    <!-- List group -->
+    <ul class="list-group">
+        {% for comment in new_commnet %}
+            <a href="{{ comment.article.url }}" class="list-group-item"><span
+                    class="badge">{{ comment.author.name }}</span>{{ comment.content }}
+            </a>
+        {% endfor %}
+    </ul>
+</div>

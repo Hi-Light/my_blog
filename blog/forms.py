@@ -3,9 +3,16 @@ import re
 import markdown
 from bs4 import BeautifulSoup
 from django import forms
-from .models import Article, Message
+from .models import Article, Message, Type
 import datetime
-from .models import type_choices
+
+
+def set_choices():
+    types = Type.objects.all()
+    choices = []
+    for type in types:
+        choices += [(type.name, type.name)]
+    return choices
 
 
 class ArticleCreateForm(forms.Form):
@@ -24,10 +31,8 @@ class ArticleCreateForm(forms.Form):
         min_length=10,
         widget=forms.Textarea(),
     )
-    type = forms.ChoiceField(
-        choices=type_choices,
-        widget=forms.Select
-    )
+    type = forms.ChoiceField(choices=set_choices(),
+                             widget=forms.Select)
 
     def save(self, username='高亮', article=None):
         cd = self.cleaned_data
@@ -36,6 +41,8 @@ class ArticleCreateForm(forms.Form):
         title_cn = cd['title_cn']
         content_md = cd['content']
         type = cd['type']
+        print(cd)
+        type = Type.objects.get(name=type)
         content_html = markdown.markdown(cd['content'])
         soup = BeautifulSoup(content_html, 'lxml')
         content_text = soup.get_text()[:200] + '......'
@@ -48,7 +55,11 @@ class ArticleCreateForm(forms.Form):
             article.content_html = content_html
             article.content_text = content_text
             article.update_time = datetime.datetime.now()
-            type = type
+            article.type.article_numbers -= 1
+            article.type.save()
+            article.type = Type.objects.get(name=type)
+            article.type.article_numbers += 1
+            article.type.save()
         else:
             article = Article(
                 url=url,
@@ -62,6 +73,8 @@ class ArticleCreateForm(forms.Form):
                 create_time=datetime.datetime.now(),
                 type=type
             )
+            type.article_numbers += 1
+            type.save()
         article.save()
 
 
