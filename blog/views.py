@@ -14,13 +14,13 @@ from django.db.models import F
 from .forms import *
 from .models import *
 
-
 # 限制只有管理员可以写文章视图的Mixin类
 class AdminRequiredMixin(object):
     @classmethod
     def as_view(cls, **initkwargs):
         view = super(AdminRequiredMixin, cls).as_view(**initkwargs)
         return staff_member_required(view)
+
 
 # 基本类
 class BaseMixin(object):

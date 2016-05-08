@@ -7,15 +7,16 @@ from .models import Article, Message, Type
 import datetime
 
 
-def set_choices():
-    types = Type.objects.all()
-    choices = []
-    for type in types:
-        choices += [(type.name, type.name)]
-    return choices
-
-
 class ArticleCreateForm(forms.Form):
+    # 每次访问创建文章视图时刷新分类选择框
+    def __init__(self, *args, **kwargs):
+        super(ArticleCreateForm, self).__init__(*args, **kwargs)
+        choices = []
+        types = Type.objects.all()
+        for type in types:
+            choices += [(type.name, type.name)]
+        self.fields['type'].choices = choices
+
     title_en = forms.CharField(
         max_length=50,
         label='标题en',
@@ -31,7 +32,7 @@ class ArticleCreateForm(forms.Form):
         min_length=10,
         widget=forms.Textarea(),
     )
-    type = forms.ChoiceField(choices=set_choices(),
+    type = forms.ChoiceField(choices=(),
                              widget=forms.Select)
 
     def save(self, username='高亮', article=None):
