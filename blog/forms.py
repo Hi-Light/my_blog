@@ -1,6 +1,6 @@
 import datetime
 import re
-import markdown
+import markdown2
 from bs4 import BeautifulSoup
 from django import forms
 from .models import Article, Message, Type
@@ -37,14 +37,12 @@ class ArticleCreateForm(forms.Form):
 
     def save(self, username='高亮', article=None):
         cd = self.cleaned_data
-        print(cd)
         title_en = cd['title_en']
         title_cn = cd['title_cn']
         content_md = cd['content']
         type = cd['type']
-        print(cd)
         type = Type.objects.get(name=type)
-        content_html = markdown.markdown(cd['content'])
+        content_html = markdown2.markdown(cd['content'])
         soup = BeautifulSoup(content_html, 'lxml')
         content_text = soup.get_text()[:200] + '......'
         url = '/article/%s' % (title_en)
